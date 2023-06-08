@@ -1,26 +1,29 @@
-def check_braces(text):
+import sys
+
+
+def check_brackets(file_path):
     stack = []
-    braces = {"(": ")", "[": "]", "{": "}"}
-    for char in text:
-        if char in braces:
-            stack.append(char)
-        elif char in braces.values():
-            if not stack or char != braces[stack.pop()]:
-                return False
-    return not stack
+    brackets = {"(": ")", "[": "]", "{": "}"}
+    with open(file_path, "r") as f:
+        text = f.read()
+        for char in text:
+            if char in brackets:
+                stack.append(char)
+            elif char in brackets.values():
+                if not stack or char != brackets[stack.pop()]:
+                    return False
+        return not stack
 
 
 def main():
-    file_name = input("Enter filename: ")
-    try:
-        with open(file_name, "r") as file:
-            text = file.read()
-            if check_braces(text):
-                print("Braces are balanced")
-            else:
-                print("Braces are not balanced")
-    except IOError as error:
-        print(f"An error occurred while opening the file: {error}")
+    if len(sys.argv) != 2:
+        print("Instructions: python brackets.py <input_file_path>")
+    else:
+        result = check_brackets(sys.argv[1])
+        if result:
+            print("Braces are balanced")
+        else:
+            print("Braces are not balanced")
 
 
 if __name__ == "__main__":
